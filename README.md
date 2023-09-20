@@ -24,6 +24,10 @@ yarn --version
 ```
 to confirm that yarn is installed.
 
+### MySQL local environment
+
+Please refer to official guides to install MySQL locally.
+
 ## Build Instructions
 
 ### 1. Clone the git repo
@@ -35,6 +39,12 @@ to confirm that yarn is installed.
 ```
 yarn install
 ```
+
+## Configs 
+
+### DB Config
+
+Change the values in ``` ./configs/db.config.js``` to suit your local enviroment.
 
 ## Scripts
 
