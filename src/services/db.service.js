@@ -48,4 +48,4 @@ const escapedQuery = async (sql, values, timeout = 40000) => {
   });
 };
 
-module.exports = { query };
+module.exports = { query, escapedQuery };
