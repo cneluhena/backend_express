@@ -1,5 +1,6 @@
 
-const dbConfig ={
+const dbConfig = {
+  connectionLimit: 10,
   host: "localhost",
   user: "dbms_user",
   password: "1234",
