@@ -9,7 +9,9 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 
 const authRoute = require("./src/routes/auth.routes");
-app.use(authRoute);
+const customerRoute = require("./src/routes/customer.routes");
+app.use("/oauth", authRoute);
+app.use("/customer", customerRoute);
 
 const port = process.env.PORT || 4000;
 
