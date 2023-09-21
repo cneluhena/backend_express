@@ -1,3 +1,5 @@
-const listPerPage = 10;
+const miscConfig = {
+  listPerPage: 10,
+};
 
-module.exports = {listPerPage}
+module.exports = { miscConfig };
