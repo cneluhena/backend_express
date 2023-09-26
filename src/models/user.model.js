@@ -4,8 +4,8 @@ const findOne = async (id) => {
   const result = await query(
     `SELECT userID, name, dob, username from User where userID=${id}`
   );
-  console.log(result);
-  return result;
+  console.log(result[0]);
+  return result[0];
 };
 
 const findAll = async () => {

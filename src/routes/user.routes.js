@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { permissionCheck } = require("../middlewares/permissonCheck");
+const { permissionCheck } = require("../middlewares/permissonInjector");
 const { findOne, findAll, updateOne } = require("../models/user.model");
 
 router.get("/users", async (req, res) => {
