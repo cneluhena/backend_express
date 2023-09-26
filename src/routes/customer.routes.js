@@ -1,50 +1,43 @@
 const express = require("express");
 const { query, escapedQuery } = require("../services/db.service");
+const permissionCheck = require("../middlewares/permissonCheck");
+const { findAll, findOne } = require("../models/customer.model");
 const router = express.Router();
 
 router.get("/customers", (req, res) => {
-  query("SELECT * from Customer")
-    .then((result) => {
-      console.log(result);
-      res.statusCode(200).json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.statusCode(500).send(err);
-    });
+  //TODO
+  if (permissionCheck("ALL_CUSTOMERS")) {
+    findAll()
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send(err);
+      });
+  } else {
+    res.status(301).send({ message: "You don't have necessary permissions" });
+  }
 });
 
 router.get("/customers/:id", (req, res) => {
-  query(`SELECT * from Customer where customerID=${req.params.id}`)
-    .then((result) => {
-      console.log(result);
-      res.statusCode(200).json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.statusCode(500).send(err);
-    });
+  // TODO Implement isOwnData
+  if (permissionCheck("ALL_CUSTOMERS") || isOwnData()) {
+    findOne(req.params.id)
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send(err);
+      });
+  } else {
+    res.status(301).send({ message: "You don't have necessary permissions" });
+  }
 });
 
-router.put("/customers/:id", (req, res) => {
-  escapedQuery(
-    `UPDATE Customer
-    set Name=${req.body.name}, NIC=${req.body.nic}, 
-    DOB=${req.body.dob}, address=${req.body.address}, 
-    phone=${req.body.phone}, email=${req.body.email}
-    where customerID=${req.params.id}`
-  )
-    .then((result) => {
-      console.log(result);
-      res.statusCode(200).json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.statusCode(500).send(err);
-    });
-});
-
-router.post("/customers/add", (req, res) => {
+router.post("/customers/new", (req, res) => {
+  // TODO Implement customer creation in models
   escapedQuery(
     `Insert into Customer (Name, NIC, DOB, Address, Phone, Email)
       Values (${req.body.name}, ${req.body.nic}, ${req.body.dob}, ${req.body.address}, ${req.body.phone}, ${req.body.email})
@@ -52,11 +45,11 @@ router.post("/customers/add", (req, res) => {
   )
     .then((result) => {
       console.log(result);
-      res.statusCode(200).json(result);
+      res.status(200).json(result);
     })
     .catch((err) => {
       console.error(err);
-      res.statusCode(500).send(err);
+      res.status(500).send(err);
     });
 });
 
