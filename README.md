@@ -18,10 +18,12 @@ To install yarn, run the following command
 npm -g install yarn
 ```
 
-Now run 
+Now run
+
 ```
 yarn --version
 ```
+
 to confirm that yarn is installed.
 
 ### MySQL local environment
@@ -40,16 +42,16 @@ Please refer to official guides to install MySQL locally.
 yarn install
 ```
 
-## Configs 
+## Configs
 
 ### DB Config
 
-Change the values in ``` ./configs/db.config.js``` to suit your local enviroment.
+Change the values in ` ./configs/db.config.js` to suit your local enviroment.
 
 ## Scripts
 
 To run the server, use following yarn script
 
 ```
-yarn run start
+yarn start
 ```
