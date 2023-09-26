@@ -12,8 +12,9 @@ require("dotenv").config()
 
 const authRoute = require("./src/routes/auth.routes");
 const customerRoute = require("./src/routes/customer.routes");
+const verifyToken = require("./src/middlewares/verifyToken");
 app.use("/oauth", authRoute);
-app.use("/customer", customerRoute);
+app.use("/customers", verifyToken, customerRoute);
 
 const port = process.env.PORT || 8080;
 

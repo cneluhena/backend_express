@@ -6,15 +6,15 @@ const {
 
 const findOne = async (id) => {
   const result = await query(
-    `SELECT c.customerID, u.name, c.nic, u.dob, c.address, c.phone, u.userID, u.username from Customer c inner join User u on c.userID=u.userID where c.customerID=${id}`
+    `SELECT c.customerID, u.name, c.nic, u.dob, c.address, c.phone, u.userID, u.username from Customer c left join User u on c.userID=u.userID where c.customerID=${id}`
   );
-  console.log(result);
-  return result;
+  console.log(result[0]);
+  return result[0];
 };
 
 const findAll = async () => {
   const result = await query(
-    "SELECT c.customerID, u.name, c.nic, u.dob, c.address, c.phone, u.userID, u.username from Customer c inner join User u on c.userID=u.userID order by c.customerID"
+    "SELECT c.customerID, u.name, c.nic, u.dob, c.address, c.phone, u.userID, u.username from Customer c left join User u on c.userID=u.userID order by c.customerID"
   );
   console.log(result);
   return result;
@@ -36,8 +36,17 @@ const addCustomer = async (data) => {
       data.phone,
     ],
   });
+  result.password = password;
   console.log(result);
   return result;
 };
 
-module.exports = { findOne, findAll };
+const findUserIDfromCustomerID = async (customerID) => {
+  const result = await query(
+    `SELECT userID from Customer where customerID=${customerID}`
+  );
+  console.log(result[0]);
+  return result[0];
+};
+
+module.exports = { findOne, findAll, addCustomer, findUserIDfromCustomerID };
