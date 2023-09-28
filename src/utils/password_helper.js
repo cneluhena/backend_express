@@ -11,7 +11,7 @@ const generateRandomPass = () => {
   return password;
 };
 
-const generate_hash = async (password) => {
+const generateHash = async (password) => {
   const saltRounds = 10;
   const hash = bcrypt.hash(password, saltRounds);
   return hash;
@@ -21,4 +21,4 @@ const comparePasswords = async (userPass, storedPass) => {
   return await bcrypt.compare(userPass, storedPass);
 }
 
-module.exports = { generateRandomPass, generate_hash, comparePasswords };
+module.exports = { generateRandomPass, generateHash, comparePasswords };

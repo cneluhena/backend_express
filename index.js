@@ -9,10 +9,12 @@ app.use(express.urlencoded({ extended: true }));
 
 require("dotenv").config();
 
+const db = require("./src/services/db.service");
+
 // Routes
 
 const verifyToken = require("./src/middlewares/verifyToken");
-app.use("/oauth", require("./src/routes/auth.routes"));
+app.use("/", require("./src/routes/auth.routes"));
 app.use("/customers", verifyToken, require("./src/routes/customer.routes"));
 app.use("/employees", verifyToken, require("./src/routes/employee.routes"));
 app.use(
@@ -34,6 +36,15 @@ app.use((req, res, next) => {
 // Start server
 const port = process.env.PORT || 8080;
 
-app.listen(port, () => {
-  console.log(`App is listnening on port ${port}`);
-});
+
+db.connect()
+  .then(() => {
+    console.log("Connected to database");
+    app.listen(port, () => {
+      console.log(`App is listnening on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit();
+  });
