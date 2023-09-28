@@ -23,4 +23,5 @@ const permissionCheck = (access, user) => {
   if (!user || !user.role) return false;
   return permissions[user.role].includes(access);
 };
-exports.permissionCheck = permissionCheck;
+
+module.exports = permissionCheck;

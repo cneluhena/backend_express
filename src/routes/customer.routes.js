@@ -14,12 +14,15 @@ router.get("/", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
 router.get("/:id", (req, res) => {
-  if (permissionCheck("ALL_CUSTOMERS", req.user) || isOwnCustomer(id, req.user.userID)) {
+  if (
+    permissionCheck("ALL_CUSTOMERS", req.user) ||
+    isOwnCustomer(id, req.user.userID)
+  ) {
     findOne(req.params.id)
       .then((result) => {
         res.status(200).json(result);
@@ -29,7 +32,7 @@ router.get("/:id", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
@@ -44,7 +47,7 @@ router.post("/new", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 

@@ -11,7 +11,7 @@ const {
 const { isOwnUser } = require("../models/isOwnData");
 const { comparePasswords } = require("../utils/password_helper");
 
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res) => {
   if (permissionCheck("ALL_USERS", req.user)) {
     findAll()
       .then((result) => {
@@ -22,11 +22,11 @@ router.get("/users", async (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
-router.get("/users/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   if (permissionCheck("ALL_USERS", req.user) || isOwnUser(id, req.user.id)) {
     findOne(req.params.id)
       .then((result) => {
@@ -38,11 +38,11 @@ router.get("/users/:id", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
-router.put("/users/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   if (permissionCheck("UPDATE_USERS", req.user) || isOwnUser(id, req.user.id)) {
     updateOne(id, req.body)
       .then((result) => {
@@ -53,11 +53,11 @@ router.put("/users/:id", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
-router.put("users/:id/change_password", async (req, res) => {
+router.put("/:id/change_password", async (req, res) => {
   if (
     permissionCheck("UPDATE_USERS_PASSWORD", req.user) ||
     isOwnUser(id, req.user.id)
@@ -76,7 +76,7 @@ router.put("users/:id/change_password", async (req, res) => {
       res.status(500).send(err);
     }
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 

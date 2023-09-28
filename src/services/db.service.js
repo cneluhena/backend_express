@@ -7,10 +7,10 @@ const connect = (callback) => {
   return new Promise((resolve, reject) => {
     pool.on("connection", function (connection) {
       connection.on("error", function (err) {
-        logger.error("MySQL error event", err);
+        console.error("MySQL error event", err);
       });
       connection.on("close", function (err) {
-        logger.warn("MySQL close event", err);
+        console.warn("MySQL close event", err);
       });
     });
     resolve();

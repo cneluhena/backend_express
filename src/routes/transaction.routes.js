@@ -36,7 +36,7 @@ router.get("/transactions/:id", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 

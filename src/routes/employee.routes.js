@@ -13,12 +13,15 @@ router.get("/employees", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
 router.get("/employees/:id", (req, res) => {
-  if (permissionCheck("ALL_EMPLOYEES", req.user) || isOwnEmployee(id, req.user.id)) {
+  if (
+    permissionCheck("ALL_EMPLOYEES", req.user) ||
+    isOwnEmployee(id, req.user.id)
+  ) {
     findOne(req.params.id)
       .then((result) => {
         res.status(200).json(result);
@@ -28,7 +31,7 @@ router.get("/employees/:id", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 
@@ -43,7 +46,7 @@ router.get("/employees/:id", (req, res) => {
 //         res.status(500).send(err);
 //       });
 //   } else {
-//     res.status(301).send({ message: "You don't have necessary permissions" });
+//     res.status(403).send({ message: "You don't have necessary permissions" });
 //   }
 // });
 
