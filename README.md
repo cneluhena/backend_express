@@ -55,3 +55,15 @@ To run the server, use following yarn script
 ```
 yarn start
 ```
+
+To add an admin user with admin previledges, run the following script.
+
+```
+yarn create-admin
+```
+
+To delete all admin users, run the following script.
+
+```
+yarn delete-all-admin
+```
