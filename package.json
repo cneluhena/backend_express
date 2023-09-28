@@ -17,6 +17,8 @@
     "nodemon": "^3.0.1"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "create-admin": "node ./scripts/createAdmin.js",
+    "delete-all-admin": "node ./scripts/deleteAllAdmin.js"
   }
 }
