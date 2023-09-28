@@ -1,5 +1,4 @@
 const express = require("express");
-const { query, escapedQuery } = require("../services/db.service");
 const permissionCheck = require("../utils/permissionCheck");
 const { findOwn, findAll, findOne } = require("../models/transaction.model");
 const { isOwnAccount } = require("../models/isOwnData");
@@ -9,9 +8,9 @@ const router = express.Router();
 router.get("/transactions", async (req, res) => {
   let result;
   try {
-    if (req.query.acc && isOwnAccount(req.query.acc, req.user)) {
+    if (req.query.acc && isOwnAccount(req.query.acc, req.user.id)) {
       result = await findOwn(req.query.acc);
-    } else if (permissionCheck("ALL_TRANSACTIONS", permissions)) {
+    } else if (permissionCheck("ALL_TRANSACTIONS", req.user)) {
       result = await findAll();
     } else {
       res.status(403).send({ message: "Permissions not found" });
@@ -25,8 +24,8 @@ router.get("/transactions", async (req, res) => {
 
 router.get("/transactions/:id", (req, res) => {
   if (
-    permissionCheck("ALL_TRANSACTIONS", permissions) ||
-    isOwnAccount(req.query.acc, req.user)
+    permissionCheck("ALL_TRANSACTIONS", req.user) ||
+    isOwnAccount(req.query.acc, req.user.id)
   ) {
     findOne(req.params.id)
       .then((result) => {

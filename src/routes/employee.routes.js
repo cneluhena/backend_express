@@ -1,10 +1,9 @@
 const express = require("express");
-const { query, escapedQuery } = require("../services/db.service");
 const permissionCheck = require("../utils/permissionCheck");
 const router = express.Router();
 
 router.get("/employees", (req, res) => {
-  if (permissionCheck("ALL_EMPLOYEES")) {
+  if (permissionCheck("ALL_EMPLOYEES", req.user.id)) {
     findAll()
       .then((result) => {
         res.status(200).json(result);
@@ -19,7 +18,7 @@ router.get("/employees", (req, res) => {
 });
 
 router.get("/employees/:id", (req, res) => {
-  if (permissionCheck("ALL_EMPLOYEES") || isOwnEmployee(id, req.user)) {
+  if (permissionCheck("ALL_EMPLOYEES", req.user) || isOwnEmployee(id, req.user.id)) {
     findOne(req.params.id)
       .then((result) => {
         res.status(200).json(result);

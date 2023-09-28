@@ -1,11 +1,10 @@
 const express = require("express");
-const { query, escapedQuery } = require("../services/db.service");
 const permissionCheck = require("../utils/permissionCheck");
 const { findAll, findOne, addCustomer } = require("../models/customer.model");
 const router = express.Router();
 
-router.get("/customers", (req, res) => {
-  if (permissionCheck("ALL_CUSTOMERS")) {
+router.get("/", (req, res) => {
+  if (permissionCheck("ALL_CUSTOMERS", req.user)) {
     findAll()
       .then((result) => {
         res.status(200).json(result);
@@ -19,8 +18,8 @@ router.get("/customers", (req, res) => {
   }
 });
 
-router.get("/customers/:id", (req, res) => {
-  if (permissionCheck("ALL_CUSTOMERS") || isOwnCustomer(id, req.user)) {
+router.get("/:id", (req, res) => {
+  if (permissionCheck("ALL_CUSTOMERS", req.user) || isOwnCustomer(id, req.user.userID)) {
     findOne(req.params.id)
       .then((result) => {
         res.status(200).json(result);
@@ -34,8 +33,8 @@ router.get("/customers/:id", (req, res) => {
   }
 });
 
-router.post("/customers/new", (req, res) => {
-  if (permissionCheck("ADD_CUSTOMER")) {
+router.post("/new", (req, res) => {
+  if (permissionCheck("ADD_CUSTOMER", req.user)) {
     addCustomer(req.body)
       .then((result) => {
         res.status(200).json(result);
