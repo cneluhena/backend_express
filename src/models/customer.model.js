@@ -1,7 +1,7 @@
 const { query, escapedQuery } = require("../services/db.service.js");
 const {
   generateRandomPass,
-  generate_hash: generateHash,
+  generateHash,
 } = require("../utils/password_helper.js");
 
 const findOne = async (id) => {

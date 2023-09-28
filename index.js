@@ -12,7 +12,7 @@ require("dotenv").config();
 // Routes
 
 const verifyToken = require("./src/middlewares/verifyToken");
-app.use("/oauth", require("./src/routes/auth.routes"));
+app.use("/", require("./src/routes/auth.routes"));
 app.use("/customers", verifyToken, require("./src/routes/customer.routes"));
 app.use("/employees", verifyToken, require("./src/routes/employee.routes"));
 app.use(
