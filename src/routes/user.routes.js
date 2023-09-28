@@ -1,10 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { permissionCheck } = require("../middlewares/permissonInjector");
-const { findOne, findAll, updateOne } = require("../models/user.model");
+const permissionCheck = require("../utils/permissionCheck");
+const {
+  findOne,
+  findAll,
+  updateOne,
+  getPassword,
+  changePassword,
+} = require("../models/user.model");
+const { isOwnUser } = require("../models/isOwnData");
+const { comparePasswords } = require("../utils/password_helper");
 
 router.get("/users", async (req, res) => {
-  if (permissionCheck("ALL_USERS")) {
+  if (permissionCheck("ALL_USERS", req.user)) {
     findAll()
       .then((result) => {
         res.status(200).json(result);
@@ -19,7 +27,7 @@ router.get("/users", async (req, res) => {
 });
 
 router.get("/users/:id", (req, res) => {
-  if (permissionCheck("ALL_USERS")) {
+  if (permissionCheck("ALL_USERS", req.user) || isOwnUser(id, req.user.id)) {
     findOne(req.params.id)
       .then((result) => {
         console.log(result);
@@ -35,7 +43,7 @@ router.get("/users/:id", (req, res) => {
 });
 
 router.put("/users/:id", (req, res) => {
-  if (permissionCheck("ALL_USERS") || isOwnData()) {
+  if (permissionCheck("UPDATE_USERS", req.user) || isOwnUser(id, req.user.id)) {
     updateOne(id, req.body)
       .then((result) => {
         res.status(200).json(result);
@@ -44,6 +52,29 @@ router.put("/users/:id", (req, res) => {
         console.error(err);
         res.status(500).send(err);
       });
+  } else {
+    res.status(301).send({ message: "You don't have necessary permissions" });
+  }
+});
+
+router.put("users/:id/change_password", async (req, res) => {
+  if (
+    permissionCheck("UPDATE_USERS_PASSWORD", req.user) ||
+    isOwnUser(id, req.user.id)
+  ) {
+    const curr_pass = req.body.current_password;
+    const new_pass = req.body.new_password;
+    try {
+      if (comparePasswords(curr_pass, await getPassword(req.params.id))) {
+        const result = await changePassword(req.params.id, new_pass);
+        res.status(200).json(result);
+      } else {
+        res.status(401).send({ message: "Current password is incorrect" });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
   } else {
     res.status(301).send({ message: "You don't have necessary permissions" });
   }

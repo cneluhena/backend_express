@@ -14,7 +14,7 @@ const verifyToken = (req, res, next) => {
         if (err) req.user = undefined;
         findOne(decode.id)
           .then((result) => {
-            req.user = result.userID;
+            req.user = result;
             next();
           })
           .catch((err) => {
