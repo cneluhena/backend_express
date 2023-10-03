@@ -2,7 +2,7 @@ const express = require("express");
 const permissionCheck = require("../utils/permissionCheck");
 const router = express.Router();
 
-router.get("/employees", (req, res) => {
+router.get("/", (req, res) => {
   if (permissionCheck("ALL_EMPLOYEES", req.user.id)) {
     findAll()
       .then((result) => {
@@ -17,7 +17,7 @@ router.get("/employees", (req, res) => {
   }
 });
 
-router.get("/employees/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   if (
     permissionCheck("ALL_EMPLOYEES", req.user) ||
     isOwnEmployee(id, req.user.id)

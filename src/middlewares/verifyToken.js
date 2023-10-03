@@ -13,18 +13,11 @@ const verifyToken = (req, res, next) => {
       function (err, decode) {
         if (err) {
           req.user = undefined;
+          res.status(403).send({ message: err });
         }
-        findOne(decode.id)
-          .then((result) => {
-            req.user = result;
-            next();
-            return;
-          })
-          .catch((err) => {
-            console.error(err);
-            res.status(500).send({ message: err });
-            return;
-          });
+        req.user = decode.user;
+        next();
+        return;
       }
     );
   } else {

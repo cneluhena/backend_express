@@ -52,3 +52,5 @@ create table Account (
     balance decimal(15,2),
 --  TODO Complete this after reviewing the ER diagram
 );
+
+-- TODO Use Triggers to take timestamps on Transactions and other things (And maybe on integrity constraints like manager user employee etc)
