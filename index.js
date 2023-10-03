@@ -2,8 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-// app.use(cors);
-// app.options("*", cors()); // include before other routes
+app.use(cors()); // include before other routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,13 +28,13 @@ app.get("/", (req, res) => {
 });
 
 // 404 Not found
-app.use((req, res, next) => {
+app.use("*", (req, res, next) => {
+  console.log("404");
   res.status(404).send({ message: "Not found" });
 });
 
 // Start server
 const port = process.env.PORT || 8080;
-
 
 db.connect()
   .then(() => {

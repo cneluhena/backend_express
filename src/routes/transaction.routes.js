@@ -5,7 +5,7 @@ const { isOwnAccount } = require("../models/isOwnData");
 const router = express.Router();
 
 // TODO Compelete this module
-router.get("/transactions", async (req, res) => {
+router.get("/", async (req, res) => {
   let result;
   try {
     if (req.query.acc && isOwnAccount(req.query.acc, req.user.id)) {
@@ -22,7 +22,7 @@ router.get("/transactions", async (req, res) => {
   res.status(200).send(result);
 });
 
-router.get("/transactions/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   if (
     permissionCheck("ALL_TRANSACTIONS", req.user) ||
     isOwnAccount(req.query.acc, req.user.id)
@@ -36,7 +36,7 @@ router.get("/transactions/:id", (req, res) => {
         res.status(500).send(err);
       });
   } else {
-    res.status(301).send({ message: "You don't have necessary permissions" });
+    res.status(403).send({ message: "You don't have necessary permissions" });
   }
 });
 

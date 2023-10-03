@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
       if (user) {
         if (comparePasswords(password, user.password)) {
           const { password, ...userToken } = user;
-          const token = jwt.sign({ id: user.id }, process.env.API_SECRET, {
+          const token = jwt.sign({ user:userToken }, process.env.API_SECRET, {
             expiresIn: 86400, // 1 day
           });
           res.status(200).send({
@@ -46,12 +46,10 @@ router.post("/signup", async (req, res) => {
         const result = await addUser(username, password);
         res.status(200).send({ message: "User created" });
       } else {
-        res
-          .status(400)
-          .send({
-            message:
-              "There is an already active user with this username. Please enter another username or use login",
-          });
+        res.status(400).send({
+          message:
+            "There is an already active user with this username. Please enter another username or use login",
+        });
       }
     } catch (err) {
       res.status(500).send({ message: err });

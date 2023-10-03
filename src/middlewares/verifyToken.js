@@ -11,21 +11,17 @@ const verifyToken = (req, res, next) => {
       req.headers.authorization.split(" ")[1],
       process.env.API_SECRET,
       function (err, decode) {
-        if (err) req.user = undefined;
-        findOne(decode.id)
-          .then((result) => {
-            req.user = result;
-            next();
-          })
-          .catch((err) => {
-            console.error(err);
-              res.status(500).send({ message: err });
-          });
+        if (err) {
+          req.user = undefined;
+          res.status(403).send({ message: err });
+        }
+        req.user = decode.user;
+        next();
+        return;
       }
     );
   } else {
     req.user = undefined;
-    next();
   }
   next();
 };
