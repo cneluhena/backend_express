@@ -45,12 +45,32 @@ create table Customer (
 );
 
 create table Account (
-    accountNo varchar(50) NOT NULL,
+    accountNo varchar(20) NOT NULL,
     customerID varchar(30),
     accType varchar(10) check (accType in ('Savings', 'Checking')),
     branchID varchar(30),
     balance decimal(15,2),
+    PRIMARY KEY (accountNo),
+    FOREIGN KEY (customerID) references Customer(customerID) on delete cascade
 --  TODO Complete this after reviewing the ER diagram
 );
 
 -- TODO Use Triggers to take timestamps on Transactions and other things (And maybe on integrity constraints like manager user employee etc)
+
+create table Transaction (
+    transactionID varchar(30) NOT NULL AUTO_INCREMENT,
+    fromAccNo varchar(20) NOT NULL,
+    toAccNo varchar(20) NOT NULL,
+    description varchar(100) DEFAULT 'CEFT',
+    trnType varchar(20) check (trnType in ('Online', 'ATM')),
+    amount decimal(15, 2) NOT NULL,
+    timeStamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (transactionID),
+    FOREIGN KEY (toAccNo) references Account(accountNo),
+    FOREIGN KEY (fromAccNo) references Account(accountNo),
+)
+
+-- create trigger balanceCheck after insert on Transaction 
+--     referencing new row as nrow
+--     for each row
+--     when (nrow.fromAccountID)

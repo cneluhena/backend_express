@@ -30,5 +30,21 @@ const findUserIDfromTransactionID = async (transactionID) => {
   return result[0];
 };
 
+// TODO Look into how to do the integrity checks
+const addTransaction = async (data) => {
+  const result = await escapedQuery({
+    sql: `INSERT INTO Transaction (transactionID, fromAccNo, toAccNo, amount, type,  description) VALUES (NULL, ?, ?, ?, ?, ?);`,
+    values: [
+      data.FromAccNo,
+      data.ToAccNo,
+      data.Amount,
+      data.Type,
+      data.Description,
+    ],
+  });
+  console.log(result);
+  return result;
+};
+
 
 module.exports = { findAll, findOwn, findOne, findUserIDfromTransactionID };
